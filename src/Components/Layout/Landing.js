@@ -1,7 +1,9 @@
 import { makeStyles } from '@mui/styles'
+import { color } from '@mui/system';
 import React from 'react'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => {
+  return {
   bgVideo: {
     position: "fixed",
     right: "0",
@@ -9,7 +11,8 @@ const useStyles = makeStyles({
     minWidth: "100%",
     minHeight: "100%"
     }
-});
+}}
+);
 
 export default function Landing() {
   
