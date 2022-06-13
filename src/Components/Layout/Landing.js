@@ -1,38 +1,14 @@
-import { makeStyles } from '@mui/styles'
-import { color } from '@mui/system';
-import React from 'react'
+import React from "react";
+import LandingBackground from "./LandingBackground";
+import SignInUpPanel from "./SignInUpPanel";
 
-const useStyles = makeStyles((theme) => {
-  return {
-  bgVideo: {
-    position: "fixed",
-    right: "0",
-    bottom: "0",
-    minWidth: "100%",
-    minHeight: "100%"
-    }
-}}
-);
-
-export default function Landing() {
-  
-  const classes = useStyles();
-
+const Landing = () => {
   return (
-    <div>
-      <video 
-        className={ classes.bgVideo } 
-        autoPlay
-        loop
-        muted
-      >
-        <source 
-          className={ classes.bgVideo } 
-          type="video/mp4" 
-          src="./videos/Fuego_de_Refineria.mp4" 
-        />
-        Your browser does not support the video tag.
-      </video>
-    </div>
+    <>
+      <LandingBackground />
+      <SignInUpPanel />
+    </>
   )
 }
+
+export default Landing;
