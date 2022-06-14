@@ -9,6 +9,7 @@ import { Container } from '@mui/material';
 import TabPanel from '../Utils/TabPanel';
 import { makeStyles } from '@mui/styles';
 import SignInTabPanel from './SignInTabPanel';
+import SignUpTabPanel from './SignUpTabPanel';
 
 function a11yProps(index) {
   return {
@@ -72,7 +73,7 @@ const SignInUpPanel = () => {
           <SignInTabPanel />
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          <Typography sx={{color: 'white'}}>Why not have something different</Typography>
+          <SignUpTabPanel />
         </TabPanel>
       </Box>
     </Container>
