@@ -1,7 +1,5 @@
 import React from 'react'
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-// import PropTypes from 'prop-types';
 
 const TabPanel = ( { children, value, index, ...other} ) => {
   return (
@@ -20,11 +18,5 @@ const TabPanel = ( { children, value, index, ...other} ) => {
     </div>
   );
 }
-
-// TabPanel.propTypes = {
-//   children: PropTypes.node,
-//   index: PropTypes.number.isRequired,
-//   value: PropTypes.number.isRequired,
-// };
 
 export default TabPanel

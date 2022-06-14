@@ -3,7 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Container } from '@mui/material';
 
 import TabPanel from '../Utils/TabPanel';
@@ -54,7 +53,7 @@ const SignInUpPanel = () => {
     <Container maxWidth='md' className={classes.signInUpContainer}>
       <Box className={classes.signInUpBox}>
         <div className={classes.signInUpLogo}>
-          <img src="images/fireBlogLogoAlpha.png" alt="FireBlog Logo Image" />
+          <img src="images/fireBlogLogoAlpha.png" alt="FireBlog Logo" />
         </div>
         <AppBar position="static" color='transparent' className={classes.signInUpAppBar}>
           <Tabs

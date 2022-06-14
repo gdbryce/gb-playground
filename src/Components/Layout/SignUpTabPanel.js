@@ -1,9 +1,24 @@
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Divider, Stack } from '@mui/material'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, registerWithEmailAndPassword, signInWithGoogle} from "../../Core/Firebase"
+import { useHistory, useNavigate } from 'react-router-dom'
 
 const SignUpTabPanel = () => {
+  const [ email, setEmail ] = useState("");
+  const [ password, setPassword ] = useState("");
+  const [ firstName, setFirstName ] = useState("");
+  const [ lastName, setLastName ] = useState("");
+  const [ user, loading, error ] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    if (user) return navigate("/LoginTest");
+  }, [ user, loading ])
+
   return (
     <div>
       <Box
@@ -13,7 +28,6 @@ const SignUpTabPanel = () => {
       >
         <Box
           noValidate
-          component="form"
           autoComplete="off"
           sx={{
             '& .MuiTextField-root': { 
@@ -28,6 +42,8 @@ const SignUpTabPanel = () => {
             label="First Name"
             variant="outlined"
             margin="normal"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <TextField 
             required
@@ -35,6 +51,8 @@ const SignUpTabPanel = () => {
             label="Last Name"
             variant="outlined"
             margin="normal"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </Box>
         <Divider>Sign Up with Username and Password</Divider>
@@ -45,6 +63,8 @@ const SignUpTabPanel = () => {
           type="email"
           variant="outlined"
           margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField 
           fullWidth
@@ -53,6 +73,8 @@ const SignUpTabPanel = () => {
           type="password"
           variant="outlined"
           margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Stack
           direction="row"
@@ -61,11 +83,24 @@ const SignUpTabPanel = () => {
           spacing={2}
           mt={2}
         >
-          <Button 
-            variant="contained"
-            >
-            Sign Up
-          </Button>
+          {email && password &&
+            <Button 
+              variant="contained"
+              id="SignUpUsernamePassword"
+              onClick={() => registerWithEmailAndPassword(firstName + ' ' + lastName, email, password)}
+              >
+              Sign Up
+            </Button>
+          }
+          {(!email || !password || (!firstName || !lastName)) &&
+            <Button 
+              variant="contained"
+              id="SignUpUsernamePassword"
+              disabled
+              >
+              Sign Up
+            </Button>
+          }
         </Stack>
         <Divider>Or</Divider>
         <Stack
@@ -77,6 +112,8 @@ const SignUpTabPanel = () => {
         >
           <Button 
             variant="contained"
+            id="SignUpGoogleAuth"
+            onClick={() => signInWithGoogle()}
             >
             sign Up with google
           </Button>

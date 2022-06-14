@@ -7,6 +7,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input:-webkit-autofill {
+  -webkit-background-color: #cccd;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-background-color: #cccd;
+} 
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
