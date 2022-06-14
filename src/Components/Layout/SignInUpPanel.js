@@ -8,6 +8,7 @@ import { Container } from '@mui/material';
 
 import TabPanel from '../Utils/TabPanel';
 import { makeStyles } from '@mui/styles';
+import SignInTabPanel from './SignInTabPanel';
 
 function a11yProps(index) {
   return {
@@ -18,17 +19,23 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => {
   return {
-    SignInUpContainer: {
-      height: '100vh'
+    signInUpContainer: {
+      height: '100vh',
+      marginTop: '25vh'
+    },
+    signInUpLogo: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      miHeight: 'auto'
     },
     signInUpBox: {
-      backgroundColor: 'black'
+      backgroundColor: '#cccd'
     },
-    SignInUpAppBar: {
-      boxShadow: 'none',
-      marginTop: '25vh',
+    signInUpAppBar: {
+      boxShadow: 'none'
     },
-    SignInUpTabLabel: {
+    signInUpTabLabel: {
       color: 'white'
     }
   }
@@ -43,29 +50,30 @@ const SignInUpPanel = () => {
   };
 
   return (
-    <Container maxWidth='md' className={classes.SignInUpContainer}>
-      <Box className={classes.SignInUpBox}>
-        <AppBar position="static" color='transparent' className={classes.SignInUpAppBar}>
+    <Container maxWidth='md' className={classes.signInUpContainer}>
+      <Box className={classes.signInUpBox}>
+        <div className={classes.signInUpLogo}>
+          <img src="images/fireBlogLogoAlpha.png" alt="FireBlog Logo Image" />
+        </div>
+        <AppBar position="static" color='transparent' className={classes.signInUpAppBar}>
           <Tabs
             value={tabValue}
             onChange={handleChange}
-            indicatorColor="secondary"
+            indicatorColor="primary"
             textColor="primary"
             variant="fullWidth"
             aria-label="full width tabs for sign in and sign up"
           >
-            <Tab label="Sign In" sx={{color: 'white'}} {...a11yProps(0)} />
-            <Tab label="Sign Up" sx={{color: 'white'}} {...a11yProps(1)} />
+            <Tab label="Sign In" {...a11yProps(0)} />
+            <Tab label="Sign Up" {...a11yProps(1)} />
           </Tabs>
         </AppBar>
-        <Box>
-          <TabPanel value={tabValue} index={0}>
-            <Typography sx={{color: 'white'}}>Item One and then some text to make it larger</Typography>
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
+        <TabPanel value={tabValue} index={0}>
+          <SignInTabPanel />
+        </TabPanel>
+        <TabPanel value={tabValue} index={1}>
           <Typography sx={{color: 'white'}}>Why not have something different</Typography>
-          </TabPanel>
-        </Box>
+        </TabPanel>
       </Box>
     </Container>
   )
