@@ -55,6 +55,7 @@ const SignInTabPanel = () => {
           {email && <Button 
             variant="contained"
             id="SignInForgotPassword"
+            color="charcoal"
             onClick={() => sendPasswordReset(email)}
             >
             Forgot Password
@@ -62,6 +63,7 @@ const SignInTabPanel = () => {
           {!email && <Button 
             variant="contained"
             id="SignInForgotPassword"
+            color="charcoal"
             disabled
             >
             Forgot Password
@@ -69,6 +71,7 @@ const SignInTabPanel = () => {
           <Button 
             variant="contained"
             id="SignInUserNamePassword"
+            color="charcoal"
             onClick={() => logInWithEmailAndPassword(email, password)}
             >
             Sign In
@@ -85,6 +88,7 @@ const SignInTabPanel = () => {
           <Button 
             variant="contained"
             id="SignInGoogleAuth"
+            color="charcoal"
             onClick={() => signInWithGoogle()}
             >
             sign in with google

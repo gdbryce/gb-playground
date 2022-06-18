@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { Button, Divider, Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db, logout } from '../../Core/Firebase';
+import Bar from '../Layout/Bar';
 
 const LoginTest = () => {
   const [ user, loading, error ] = useAuthState(auth);
@@ -30,19 +31,23 @@ const LoginTest = () => {
   }, [ user, loading ])
 
   return (
+    <>
+    <Bar />
     <div>
-      <Typography variant="h1">Logged in as:</Typography>
-      <Typography variant="h2">User: {name}</Typography>
-      <Typography variant="h2">Email: {user?.email}</Typography>
+      <Typography variant="h3">Logged in as:</Typography>
+      <Typography variant="h4">User: {name}</Typography>
+      <Typography variant="h5">Email: {user?.email}</Typography>
       <Divider />
       <Stack
         direction="row"
       >
         <Button 
           variant="contained"
+          color="charcoal"
           onClick={logout}>Sign Out</Button>
       </Stack>
     </div>
+    </>
   )
 };
 

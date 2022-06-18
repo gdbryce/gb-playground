@@ -87,6 +87,7 @@ const SignUpTabPanel = () => {
             <Button 
               variant="contained"
               id="SignUpUsernamePassword"
+              color="charcoal"
               onClick={() => registerWithEmailAndPassword(firstName + ' ' + lastName, email, password)}
               >
               Sign Up
@@ -96,6 +97,7 @@ const SignUpTabPanel = () => {
             <Button 
               variant="contained"
               id="SignUpUsernamePassword"
+              color="charcoal"
               disabled
               >
               Sign Up
@@ -113,6 +115,7 @@ const SignUpTabPanel = () => {
           <Button 
             variant="contained"
             id="SignUpGoogleAuth"
+            color="charcoal"
             onClick={() => signInWithGoogle()}
             >
             sign Up with google
