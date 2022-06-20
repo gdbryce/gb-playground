@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/material';
 
-import TabPanel from '../Utils/TabPanel';
+import TabPanel from '../../Utils/TabPanel';
 import { makeStyles } from '@mui/styles';
 import SignInTabPanel from './SignInTabPanel';
 import SignUpTabPanel from './SignUpTabPanel';

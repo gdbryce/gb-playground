@@ -2,13 +2,12 @@ import { Avatar, IconButton, Tooltip, Typography } from '@mui/material'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db, logout } from '../../Core/Firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import useStringAvatar from '../../Hooks/useStringAvatar';
-
 
 const NavAvatarMenu = () => {
   const [ user, loading, error ] = useAuthState(auth);
@@ -18,6 +17,7 @@ const NavAvatarMenu = () => {
 
   const fetchUserName = async () => {
     try {
+      console.log("Firestore: Query to user");
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
@@ -45,22 +45,17 @@ const NavAvatarMenu = () => {
   const menuOptions = [
     {
       title: "Profile",
-      action: {handleCloseUserMenu}
+      action: handleCloseUserMenu
     }, 
     {
       title: "SignOut",
-      action: {handleLogout}
+      action: logout
     }];
 
   useEffect(() => {
     if (loading) return;
-    fetchUserName();
-  }, [ user, loading, stringAvatar ])
-
-  // useEffect(() => {
-  //   if (!name) return;
-  //   updateStringAvatar(name); 
-  // }, [name])
+    if (user) fetchUserName();
+  }, [ user, loading ])
 
   return (
     <>
@@ -100,7 +95,7 @@ const NavAvatarMenu = () => {
           {menuOptions.map((item) => (
             <MenuItem
               key={item.title}
-              onClick={handleCloseUserMenu}
+              onClick={item.action}
             >
               <Typography textAlign="center">
                 {item.title}

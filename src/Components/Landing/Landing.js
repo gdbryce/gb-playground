@@ -1,6 +1,6 @@
 import React from "react";
 import LandingBackground from "./LandingBackground";
-import SignInUpPanel from "./SignInUpPanel";
+import SignInUpPanel from "./SignInUp/SignInUpPanel";
 
 const Landing = () => {
   return (

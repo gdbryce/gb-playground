@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 import { Button, Divider, Stack } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth, logInWithEmailAndPassword, signInWithGoogle, sendPasswordReset } from "../../Core/Firebase" 
+import { auth, logInWithEmailAndPassword, signInWithGoogle, sendPasswordReset } from "../../../Core/Firebase" 
 
 const SignInTabPanel = () => {
   const [ email, setEmail ] = useState("");

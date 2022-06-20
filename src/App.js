@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, orange } from '@mui/material/colors';
 
-import Landing from './Components/Layout/Landing';
+import Landing from './Components/Landing/Landing';
 import LoginTest from './Components/Utils/LoginTest';
 
 const theme = createTheme({

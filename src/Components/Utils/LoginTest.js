@@ -5,6 +5,7 @@ import { Button, Divider, Stack, Typography } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db, logout } from '../../Core/Firebase';
 import Bar from '../Layout/Bar';
+import BlogContainer from '../Blog/BlogContainer';
 
 const LoginTest = () => {
   const [ user, loading, error ] = useAuthState(auth);
@@ -13,6 +14,7 @@ const LoginTest = () => {
 
   const fetchUserName = async () => {
     try {
+      console.log("Firestore: Query to user");
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
@@ -37,6 +39,11 @@ const LoginTest = () => {
       <Typography variant="h3">Logged in as:</Typography>
       <Typography variant="h4">User: {name}</Typography>
       <Typography variant="h5">Email: {user?.email}</Typography>
+      <Divider />
+      <Typography variant="h3">
+        Blog list
+      </Typography>
+      <BlogContainer />
       <Divider />
       <Stack
         direction="row"
