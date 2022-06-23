@@ -12,12 +12,15 @@ const BlogContainer = () => {
   return (
     <Container sx={{mt: 2}}>
       <Stack spacing={2}>
-      {blogs && blogs.map((blog) => (
-        <BlogCard 
-          key={blog.id} 
-          blog={blog}
-        />
-      ))}
+      {blogs && blogs.map((blog) => {
+        // console.log(blog)
+        return (
+          <BlogCard 
+            key={blog.id} 
+            blog={{...blog}}
+          />
+        )
+      })}
       </Stack>
     </Container>
   )

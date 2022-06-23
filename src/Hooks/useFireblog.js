@@ -4,7 +4,7 @@ import { auth, db } from '../Core/Firebase';
 import { collection, query, where, getDocs, orderBy, limit, startAt } from 'firebase/firestore';
 
 
-export default function useFireblog(pageNumber = 1) {
+export default function useFireblog(pageNumber) {
   const [blogs, setBlogs] = useState()
   const [lastBlog, setLastBlog] = useState()
 
@@ -40,11 +40,12 @@ export default function useFireblog(pageNumber = 1) {
       return {id: doc.id, ...doc.data()}
     })
     
-    setBlogs(blogs)
+    setBlogs((prev) => ({... new Set({...prev, ...blogs})}))
     setLastBlog(querySnapshot.docs[pageLimit-1])
   }
 
   useEffect(() => {
+    console.log(`useFireblog useEffect called, dependency - pageNumber = ${pageNumber}`)
     if(!blogs) {
       pageNumber === 1 ? getFirstResults() : getNextResults()
     }
