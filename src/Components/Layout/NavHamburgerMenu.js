@@ -50,8 +50,8 @@ const NavHamburgerMenu = ( { menuItems } ) => {
         }}
       >
         {menuItems.map((item) => (
-        <MenuItem key={item} onClick={handleCloseNavMenu}>
-          <Typography textAlign="center">{item}</Typography>
+        <MenuItem key={item.title} onClick={handleCloseNavMenu}>
+          <Typography textAlign="center">{item.title}</Typography>
         </MenuItem>
       ))}
       </Menu>
@@ -60,7 +60,7 @@ const NavHamburgerMenu = ( { menuItems } ) => {
 }
 
 NavHamburgerMenu.propTypes = {
-  menuItems: PropTypes.arrayOf(PropTypes.string)
+  menuItems: PropTypes.array
 };
 
 export default NavHamburgerMenu;

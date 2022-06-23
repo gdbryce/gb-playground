@@ -12,10 +12,11 @@ const NavButtonStackMenu = ( { menuItems } ) => {
       {menuItems.map(item => {
         return (
           <Button
-            key={item}
-            color="fireAccent"
+            key={item.title}
+            color="secondary"
+            onClick={item.action}
           >
-            {item}
+            {item.title}
           </Button>
         )
       })}
@@ -24,7 +25,7 @@ const NavButtonStackMenu = ( { menuItems } ) => {
 }
 
 NavButtonStackMenu.propTypes = {
-  menuItems: PropTypes.arrayOf(PropTypes.string)
+  menuItems: PropTypes.array
 };
 
 export default NavButtonStackMenu

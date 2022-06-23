@@ -1,34 +1,41 @@
 import { Avatar, IconButton, Tooltip, Typography } from '@mui/material'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate } from "react-router-dom"
 // import PropTypes from 'prop-types'
 
-import { useAuthState } from 'react-firebase-hooks/auth'
+// import { useAuthState } from 'react-firebase-hooks/auth'
+
+import { AuthContext } from '../../Contexts/AuthProvider';
+
 import { auth, db, logout } from '../../Core/Firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import useStringAvatar from '../../Hooks/useStringAvatar';
+// import { collection, query, where, getDocs } from 'firebase/firestore';
+import useAvatar from '../../Hooks/useAvatar';
 
 const NavAvatarMenu = () => {
-  const [ user, loading, error ] = useAuthState(auth);
-  const [ name, setName ] = useState("");
+  const { userName } = useContext(AuthContext);
+  // const [ user, loading, error ] = useAuthState(auth);
+  // const [ name, setName ] = useState("");
   const [ anchorElUser, setAnchorElUser ] = useState(null);
-  const [ stringAvatar, updateStringAvatar ] = useStringAvatar("");
+  const [ avatarInitials, avatarColor ] = useAvatar(userName);
 
-  const fetchUserName = async () => {
-    try {
-      console.log("Firestore: Query to user");
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      setName(data.name);
-      updateStringAvatar(data.name);
-    }
-    catch (err) {
-      console.log(err);
-      alert(err.message);
-    }
-  };
+  const navigate = useNavigate();
+
+  // const fetchUserName = async () => {
+  //   try {
+  //     console.log("Firestore: Query to user");
+  //     const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+  //     const doc = await getDocs(q);
+  //     const data = doc.docs[0].data();
+  //     setName(data.name);
+  //     updateStringAvatar(data.name);
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //     alert(err.message);
+  //   }
+  // };
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -39,7 +46,8 @@ const NavAvatarMenu = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    console.log("Calling handle logout")
+    logout()
   }
   
   const menuOptions = [
@@ -48,14 +56,14 @@ const NavAvatarMenu = () => {
       action: handleCloseUserMenu
     }, 
     {
-      title: "SignOut",
-      action: logout
+      title: "Sign Out",
+      action: handleLogout
     }];
 
-  useEffect(() => {
-    if (loading) return;
-    if (user) fetchUserName();
-  }, [ user, loading ])
+  // useEffect(() => {
+  //   if (loading) return;
+  //   if (user) fetchUserName();
+  // }, [ user, loading ])
 
   return (
     <>
@@ -65,13 +73,13 @@ const NavAvatarMenu = () => {
           sx={{
             p: 0
           }}>
-          {stringAvatar && <Avatar
-            alt={`Avatar for ${name}`}
+          {avatarInitials && <Avatar
+            alt={`Avatar for ${userName}`}
             sx={{
-              bgcolor: stringAvatar.avatarColor
+              bgcolor: avatarColor
             }}
           >
-            {stringAvatar.avatarInitials}
+            {avatarInitials}
           </Avatar>}
         </IconButton>
       </Tooltip>

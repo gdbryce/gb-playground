@@ -1,21 +1,22 @@
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { Button, Divider, Stack } from '@mui/material'
-import { useAuthState } from 'react-firebase-hooks/auth'
+// import { AuthContext } from '../../../Contexts/AuthProvider'
+// import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, logInWithEmailAndPassword, signInWithGoogle, sendPasswordReset } from "../../../Core/Firebase" 
 
 const SignInTabPanel = () => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
-  const [ user, loading, error ] = useAuthState(auth);
-  const navigate = useNavigate();
+  // const { currentUser } = useContext(AuthContext)
+  // const [ user, loading, error ] = useAuthState(auth);
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loading) return;
-    if (user) return navigate("/LoginTest");
-  }, [ user, loading ])
+  // useEffect(() => {
+  //   currentUser && navigate("/Home")
+  // }, [ currentUser ])
 
   return (
     <div>
@@ -55,7 +56,6 @@ const SignInTabPanel = () => {
           {email && <Button 
             variant="contained"
             id="SignInForgotPassword"
-            color="charcoal"
             onClick={() => sendPasswordReset(email)}
             >
             Forgot Password
@@ -63,7 +63,6 @@ const SignInTabPanel = () => {
           {!email && <Button 
             variant="contained"
             id="SignInForgotPassword"
-            color="charcoal"
             disabled
             >
             Forgot Password
@@ -71,7 +70,6 @@ const SignInTabPanel = () => {
           <Button 
             variant="contained"
             id="SignInUserNamePassword"
-            color="charcoal"
             onClick={() => logInWithEmailAndPassword(email, password)}
             >
             Sign In
@@ -88,7 +86,6 @@ const SignInTabPanel = () => {
           <Button 
             variant="contained"
             id="SignInGoogleAuth"
-            color="charcoal"
             onClick={() => signInWithGoogle()}
             >
             sign in with google

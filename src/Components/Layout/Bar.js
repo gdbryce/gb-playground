@@ -9,14 +9,31 @@ import NavHamburgerMenu from './NavHamburgerMenu';
 import NavButtonStackMenu from './NavButtonStackMenu';
 import NavAvatarMenu from './NavAvatarMenu';
 
+import { logout } from '../../Core/Firebase';
 
-const Bar = () => {
-  const pages = ["Home", "Blog"];
+const Bar = ( { toggleNewBlog } ) => {
+  const handleHomeClick = () => {
+    console.log("Home Clicked")
+  }
+
+  const navMenuItems = [
+    {
+      title: "Home",
+      action: handleHomeClick
+    },
+    {
+      title: "Add Blog",
+      action: toggleNewBlog
+    },
+    {
+      title: "Log Out",
+      action: logout
+    }
+  ];
 
   return (
     <AppBar 
       position="static"
-      color="charcoal"
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -46,7 +63,7 @@ const Bar = () => {
               flexGrow: 1
             }}
           >
-            <NavHamburgerMenu menuItems={pages} />
+            <NavHamburgerMenu menuItems={navMenuItems} />
           </Box>
 
           {/* 
@@ -76,7 +93,7 @@ const Bar = () => {
               flexGrow: 1
             }}
           >
-            <NavButtonStackMenu menuItems={pages} />
+            <NavButtonStackMenu menuItems={navMenuItems} />
           </Box>
 
           <Box
