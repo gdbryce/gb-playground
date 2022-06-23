@@ -9,6 +9,7 @@ import { AuthContext } from '../../Contexts/AuthProvider';
 
 import Bar from '../Layout/Bar';
 import BlogContainer from '../Blog/BlogContainer';
+import BlogEntry from '../Blog/BlogEntry';
 
 const initialNewBlog = {
   visible: false,
@@ -77,17 +78,11 @@ const Home = () => {
   return (
     <>
     <Bar toggleNewBlog={handleToggleNewBlog}/>
-    {newBlog.visible &&
-      <>
-        <Divider />
-        <Typography
-          variant="h3"
-        >
-          Add new blog is visible
-        </Typography>
-      </>
-    }
     <Divider />
+
+    {newBlog.visible && <BlogEntry />}
+    {/* <Divider /> */}
+    
     <BlogContainer />
     </>
   )

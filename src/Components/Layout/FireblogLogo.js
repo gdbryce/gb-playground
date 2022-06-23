@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 const useStyles = makeStyles((theme) => {
   return {
     AppBarLogo: {
-      width: "3rem",
+      width: "2em",
       height: "auto"
     }
   }
@@ -23,9 +23,10 @@ const FireblogLogo = () => {
         alt="App bar logo"
       />
       <Typography
-        variant="h3"
+        variant="h4"
         component="h2"
         align="center"
+        nowrap="hidden"
         sx={{
           px: 2,
           display:"inline"

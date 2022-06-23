@@ -33,7 +33,7 @@ const Bar = ( { toggleNewBlog } ) => {
 
   return (
     <AppBar 
-      position="static"
+      position="sticky"
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -75,6 +75,7 @@ const Bar = ( { toggleNewBlog } ) => {
               mr: 1,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
+              overflow: "hidden",
               alignItems: "center"
             }}
           >

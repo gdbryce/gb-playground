@@ -17,7 +17,7 @@ const BlogCard = ( { blog } ) => {
   return (
     <Card 
       color="charcoal"
-      sx={{ maxWidth: "40em" }}
+      sx={{ maxWidth: 600 }}
     >
       {blog && 
         <>
@@ -46,7 +46,7 @@ const BlogCard = ( { blog } ) => {
           {blog.blogMeta.hasBlogImage &&
           <CardMedia
             component="img"
-            height="200em"
+            height= {250}
             image={imageURL}
             alt="blog image retrieved from GCS"
           />}
