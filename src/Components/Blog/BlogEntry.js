@@ -3,6 +3,7 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ImageIcon from '@mui/icons-material/Image';  
 import EventIcon from '@mui/icons-material/Event';
 import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Typography, Button, Stack } from '@mui/material';
+import BlogImageDropzone from './BlogImageDropzone';
 
 const buttons = [
   <ToggleButton key="BlogEntry-btn-blogText" value="blogText"><TextSnippetIcon /></ToggleButton>,
@@ -85,12 +86,12 @@ const BlogEntry = () => {
             {buttonSelections.includes("blogImage") && 
               <Box
                 sx={{
-                  m: 1
+                  m: 1,
+                  display: "flex",
+                  flexGrow: 1
                 }}
               >
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet quibusdam recusandae architecto dolor libero perferendis vitae enim, temporibus quas vel, adipisci quam quaerat ad aspernatur magnam repellendus iusto ab dolores.
-                </Typography>
+                <BlogImageDropzone />
               </Box>
             }
 
