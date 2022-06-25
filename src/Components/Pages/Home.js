@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Divider, Stack, Typography } from '@mui/material'
 // import { useAuthState } from 'react-firebase-hooks/auth'
 // import { auth, db, logout } from '../../Core/Firebase';
+import useFireblog from '../../Hooks/useFireblog'
 
 import { AuthContext } from '../../Contexts/AuthProvider';
 
@@ -13,12 +14,20 @@ import BlogEntry from '../Blog/BlogEntry';
 
 const initialNewBlog = {
   visible: false,
-  addImage: false,
-  addText: false,
-  addEvent: false,
+  uploadingImage: "",
+  submitting: false,
+  blogMeta: {
+    hasBlogText: false,
+    hasBlogImage: false,
+    hasBlogEvent: false,
+    invoker: "useFireblog.submitBlogToFirestore"
+  },
   image: null,
-  blogTitle: "",
-  blogText: ""
+  imageURL: null,
+  author: "",
+  title: "",
+  blogText: "",
+  posted: null
 }
 
 const newBlogReducer = ( state, { type, payload } ) => {
@@ -27,6 +36,46 @@ const newBlogReducer = ( state, { type, payload } ) => {
       return {
         ...state,
         visible: payload.newValue
+      }
+    case "SUBMITTING":
+      return {
+        ...state,
+        submitting: true
+      }
+    case "UPDATE_UPLOADING_IMAGE":
+      return {
+        ...state,
+        uploadingImage: payload.uploadingImage
+      }
+    case "UPDATE_AUTHOR":
+      return {
+        ...state,
+        author: payload.userName
+      }
+    case "UPDATE_BLOG_META" :
+      return {
+        ...state,
+        blogMeta: payload.blogMeta
+      }
+    case "UPDATE_BLOG_TITLE":
+      return {
+        ...state,
+        title: payload.title
+      }
+    case "UPDATE_BLOG_TEXT":
+      return {
+        ...state,
+        blogText: payload.blogText
+      }
+    case "UPDATE_BLOG_IMAGE":
+      return {
+        ...state,
+        image: payload.image,
+        imageURL: payload.imageURL
+      }
+    case "RESET_NEW_BLOG":
+      return {
+        initialNewBlog
       }
     default: 
       return state
@@ -37,9 +86,16 @@ const Home = () => {
   // const [ user, loading, error ] = useAuthState(auth);
   // const [ name, setName ] = useState("");
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, userName } = useContext(AuthContext);
 
-  const [ newBlog, dispatch ] = useReducer(newBlogReducer, initialNewBlog)
+  const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
+
+  // const [refreshBlogs, setRefreshBlogs] = useState(false)
+  // const [pageNumber, setPageNumber] = useState(1)
+
+  const [blogControl, setBlogControl] = useState({refresh: false, pageNumber: 1})
+  const { blogs, lastBlog } = useFireblog(blogControl, newBlog.uploadingImage)
+
   const navigate = useNavigate();
 
   // const fetchUserName = async () => {
@@ -69,6 +125,15 @@ const Home = () => {
     !currentUser && navigate("/", { replace: true} )
   }, [currentUser])
 
+  useEffect(() => {
+    userName && dispatch({
+      type: "UPDATE_AUTHOR",
+      payload: {
+        userName
+      }
+    })
+  }, [userName])
+
   // useEffect(() => {
   //   if (loading) return;
   //   if (!user) return navigate("/");
@@ -80,10 +145,10 @@ const Home = () => {
     <Bar toggleNewBlog={handleToggleNewBlog}/>
     <Divider />
 
-    {newBlog.visible && <BlogEntry />}
+    {newBlog.visible && <BlogEntry newBlogState={newBlog} newBlogDispatch={dispatch} triggerRefresh={setBlogControl}/>}
     {/* <Divider /> */}
     
-    <BlogContainer />
+    <BlogContainer blogs={blogs} uploadingImage={newBlog.uploadingImage}/>
     </>
   )
 };

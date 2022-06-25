@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ImageIcon from '@mui/icons-material/Image';  
 import EventIcon from '@mui/icons-material/Event';
 import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Typography, Button, Stack } from '@mui/material';
 import BlogImageDropzone from './BlogImageDropzone';
+
+import { submitBlogToFirestore } from '../../Core/Firebase';
+import { useEffect } from 'react';
+// import { AuthContext } from '../../Contexts/AuthProvider';
+
 
 const buttons = [
   <ToggleButton key="BlogEntry-btn-blogText" value="blogText"><TextSnippetIcon /></ToggleButton>,
@@ -11,13 +16,111 @@ const buttons = [
   <ToggleButton key="BlogEntry-btn-blogEvent" value="blogEvent"><EventIcon /></ToggleButton>
 ]
 
-const BlogEntry = () => {
+const BlogEntry = ({ newBlogState, newBlogDispatch, triggerRefresh }) => {
   const [buttonSelections, setButtonSelections] = useState(() => ["blogText"]);
 
+  // const [blogText, setBlogText] = useState("");
+  // const [blogTitle, setBlogTitle] = useState("");
+  // const [droppedBlogImage, setDroppedBlogImage] = useState();
+  // const [droppedBlogImageURL, setDroppedBlogImageURL] = useState();
+  // const [uploadingImage, setUploadingImage] = useState();
+
+  // const { userName } = useContext(AuthContext);
+
+  const handleImageDrop = acceptedFiles => {
+    // setDroppedBlogImage(acceptedFiles[0]);
+    // setDroppedBlogImageURL(URL.createObjectURL(acceptedFiles[0]));
+
+    newBlogDispatch({
+      type: "UPDATE_BLOG_IMAGE",
+      payload: {
+        image: acceptedFiles[0],
+        imageURL: URL.createObjectURL(acceptedFiles[0])
+      }
+    })
+  };
+
+  const resetImage = e => {
+    e.preventDefault();
+
+    // setDroppedBlogImage(null);
+    // setDroppedBlogImageURL(null);
+
+    newBlogDispatch({
+      type: "UPDATE_BLOG_IMAGE",
+      payload: {
+        image: null,
+        imageURL: null
+      }
+    })
+  };
+
   const handleNewSelection = (event, newSelections) => {
-    if (newSelections.includes("blogText") || newSelections.includes("blogImage"))
+    if (newSelections.includes("blogText") || newSelections.includes("blogImage")) {
       setButtonSelections(newSelections)
+      newBlogDispatch({
+        type: "UPDATE_BLOG_META",
+        payload: {
+          blogMeta: {
+            hasBlogText: newSelections.includes("blogText"),
+            hasBlogImage: newSelections.includes("blogImage"),
+            hasBlogEvent: newSelections.includes("blogEvent")
+          }
+        }
+      })
+    }
   }
+
+  const submitBlog = () => {
+    // Do some validations
+    if (!newBlogState.title) return;
+    if (buttonSelections.includes("blogText")  && !newBlogState.blogText) return;
+    if (buttonSelections.includes("blogImage") && !newBlogState.image) return;
+
+    console.log("Submit Blog passed validations") 
+
+    newBlogDispatch({
+      type: "SUBMITTING",
+      payload: {}
+    })
+
+    // Submit to the blog useing the firebase core module
+    submitBlogToFirestore(
+      newBlogState,
+      setUploadingImage
+    )
+
+  }
+
+  // Struturing props for passing to BlogImageDropzone component
+  // This will allow all state to be managed by this BlogEntry component
+  // Which will then use the useFireblog hook to write to firestore and GCS
+  const imageProps = {
+    droppedBlogImage: newBlogState.image,
+    droppedBlogImageURL: newBlogState.imageURL,
+    handleImageDrop,
+    resetImage,
+  }
+
+  const setUploadingImage = (filename) => {
+    newBlogDispatch({
+      type: "UPDATE_UPLOADING_IMAGE",
+      payload: {
+        uploadingImage: filename
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (newBlogState.submitting) {
+      if (newBlogState.uploadingImage) return;
+
+      newBlogDispatch({
+        type: "RESET_NEW_BLOG",
+        payload: {}
+      })
+    }
+  }, [newBlogState])
 
   return (
     <Container
@@ -43,6 +146,8 @@ const BlogEntry = () => {
             label="Add your title here..."
             required
             variant="standard"
+            value={newBlogState.title}
+            onChange={(e) => newBlogDispatch({type: "UPDATE_BLOG_TITLE", payload: {title: e.target.value}})}
           />
         </Box>
 
@@ -91,7 +196,7 @@ const BlogEntry = () => {
                   flexGrow: 1
                 }}
               >
-                <BlogImageDropzone />
+                <BlogImageDropzone {...imageProps}/>
               </Box>
             }
 
@@ -107,6 +212,8 @@ const BlogEntry = () => {
                 fullWidth
                 variant='filled'
                 label="Write something..."
+                value={newBlogState.blogText}
+                onChange={(e) => newBlogDispatch({type: "UPDATE_BLOG_TEXT", payload: {blogText: e.target.value}})}
               />
             </Box>
             }
@@ -142,6 +249,7 @@ const BlogEntry = () => {
               id="BlogEntry-btn-submit" 
               color="secondary" 
               variant="contained"
+              onClick={submitBlog}
             >
               submit
             </Button>

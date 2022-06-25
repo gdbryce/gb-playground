@@ -4,21 +4,12 @@ import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mu
 import UploadIcon from '@mui/icons-material/Upload';
 import Dropzone from 'react-dropzone'
 
-const BlogImageDropzone = () => {
-  const [droppedBlogImage, setDroppedBlogImage] = useState();
-  const [droppedBlogImageURL, setDroppedBlogImageURL] = useState();
-
-  const handleImageDrop = acceptedFiles => {
-    setDroppedBlogImage(acceptedFiles[0]);
-    setDroppedBlogImageURL(URL.createObjectURL(acceptedFiles[0]));
-  };
-
-  const resetImage = e => {
-    e.preventDefault();
-
-    setDroppedBlogImage(null);
-    setDroppedBlogImageURL(null);
-  };
+const BlogImageDropzone = ({
+  droppedBlogImage,
+  droppedBlogImageURL,
+  handleImageDrop,
+  resetImage
+}) => {
 
   return (
     <>
@@ -43,29 +34,6 @@ const BlogImageDropzone = () => {
           />
         </ImageListItem>
       </ImageList>
-
-        // <Box
-        //   sx={{
-        //     m: 1,
-        //     width: "100%",
-        //     maxHeight: 200
-        //   }}
-        //   onClick={resetImage}
-        // >
-        //     <img src={droppedBlogImageURL} alt="testing dropzone url" onClick={resetImage}/>
-        //     <Box
-        //       sx={{
-        //         p: 1
-        //       }}
-        //       onClick={resetImage}
-        //     >
-        //       <Typography
-        //         variant="subtitle2"
-        //       >
-        //         Click to remove
-        //       </Typography>
-        //     </Box>
-        // </Box>>
     }
 
     {!droppedBlogImage &&

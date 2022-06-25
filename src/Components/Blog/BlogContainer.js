@@ -1,14 +1,8 @@
 import { Container, Stack } from '@mui/material'
 import React, { useState } from 'react'
-import useFireblog from '../../Hooks/useFireblog'
 import BlogCard from './BlogCard'
 
-const BlogContainer = () => {
-  const [pageNumber, setPageNumber] = useState(1)
-  const { blogs, lastBlog } = useFireblog(pageNumber)
- 
-  // console.log(blogs)
-
+const BlogContainer = ({ blogs, uploadingImage }) => {
   return (
     <Container sx={{mt: 2}}>
       <Stack spacing={2}>
@@ -17,7 +11,8 @@ const BlogContainer = () => {
         return (
           <BlogCard 
             key={blog.id} 
-            blog={{...blog}}
+            blog={blog}
+            uploadingImage={uploadingImage}
           />
         )
       })}

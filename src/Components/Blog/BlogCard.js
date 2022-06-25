@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 import useAvatar from '../../Hooks/useAvatar'
 import useBlogImage from '../../Hooks/useBlogImage'
 
-const BlogCard = ( { blog } ) => {
+const BlogCard = ( { blog, uploadingImage } ) => {
   const [ avatarInitials, avatarColor ] = useAvatar(blog.author);
-  const { imageURL } = useBlogImage(blog.id, blog.blogMeta, false);
+  const { imageURL } = useBlogImage(blog.id, blog.blogMeta, uploadingImage);
 
   // useEffect(() => {
   //   blog && updateStringAvatar(blog.blog.author);
@@ -62,7 +62,7 @@ const BlogCard = ( { blog } ) => {
               gutterBottom
               variant="body2"
             >
-              {blog.posted.toDate().
+              {blog.posted && blog.posted.toDate().
                 toLocaleDateString('en-GB', 
                 {
                   weekday: 'long',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getStorage, ref, getDownloadURL } from "firebase/storage"
 
-function useBlogImage( blogID, blogMeta, uploadingImage = false ) {
+function useBlogImage( blogID, blogMeta, uploadingImage) {
   const [ imageURL, setImageURL] = useState();
 
   const getBlogImage = blogID => {
@@ -11,7 +11,10 @@ function useBlogImage( blogID, blogMeta, uploadingImage = false ) {
               .then((url) => {
                   // console.log(url);
                   setImageURL(url);
-              });
+              })
+              .catch((err) => {
+                console.log(`Error when gathering image download URL from useBlogImage - ${err.message} `)
+              })
       }
   }
 

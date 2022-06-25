@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
 import { auth, db } from '../Core/Firebase';
-import { collection, query, where, getDocs, orderBy, limit, startAt } from 'firebase/firestore';
+import { onSnapshot, collection, query, where, getDocs, orderBy, limit, startAt} from 'firebase/firestore';
 
 
-export default function useFireblog(pageNumber) {
+export default function useFireblog(blogControl, uploadingImage) {
   const [blogs, setBlogs] = useState()
   const [lastBlog, setLastBlog] = useState()
 
@@ -13,7 +13,6 @@ export default function useFireblog(pageNumber) {
   async function getFirstResults() {
     console.log("Hitting first query")
     if (!blogs) {
-      console.log("Querying testBlogs")
       const q = query(collection(db, "testBlogs"),
                       orderBy("posted", "desc"),
                       limit(pageLimit))
@@ -45,14 +44,29 @@ export default function useFireblog(pageNumber) {
   }
 
   useEffect(() => {
-    console.log(`useFireblog useEffect called, dependency - pageNumber = ${pageNumber}`)
-    if(!blogs) {
-      pageNumber === 1 ? getFirstResults() : getNextResults()
-    }
-    else {
-      if(pageNumber > 1) getNextResults()
-    }
-  }, [pageNumber])
+    console.log(`useFireblog useEffect called, dependency - refresh = ${blogControl.refresh}, pageNumber = ${blogControl.pageNumber}`)
+    // if(!blogs) {
+    //   blogControl.pageNumber === 1 || blogControl.refresh ? getFirstResults() : getNextResults()
+    // }
+    // else {
+    //   if(blogControl.pageNumber > 1) getNextResults()
+    // }
+
+    // Moving to a query snapshot with a variable limit
+    const q = query(collection(db, "testBlogs"),
+                      orderBy("posted", "desc"),
+                      limit(pageLimit*blogControl.pageNumber))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const blogs = snapshot.docs.map((doc) => {
+        return {id: doc.id, ...doc.data()}
+      })
+
+      setBlogs(blogs)
+      setLastBlog(snapshot.docs[pageLimit-1])
+    })
+
+    return() => unsubscribe()
+  }, [blogControl.pageNumber, uploadingImage])
 
   return { blogs, lastBlog };
 }
