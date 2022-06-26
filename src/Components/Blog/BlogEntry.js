@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ImageIcon from '@mui/icons-material/Image';  
 import EventIcon from '@mui/icons-material/Event';
-import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Typography, Button, Stack } from '@mui/material';
+import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Button, Stack } from '@mui/material';
 import BlogImageDropzone from './BlogImageDropzone';
 
 import { submitBlogToFirestore } from '../../Core/Firebase';
@@ -113,7 +113,8 @@ const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
     >
       <Paper
         sx={{
-          maxWidth: 600
+          maxWidth: "75vw",
+          mx: "auto"
         }}
       >
         {/* Blog Title - full width of the paper at the header */}

@@ -4,26 +4,38 @@ import { useCallback } from 'react'
 import { useRef } from 'react'
 import BlogCard from './BlogCard'
 
-const BlogContainer = ({ blogs, lastBlog, uploadingImage, setPageNumber }) => {
+const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, setPageNumber }) => {
   const  lastBlogRef = useRef()
 
   const lastBlogComponentCallback = useCallback((node) => {
     if (lastBlogRef.current) lastBlogRef.current.disconnect()
 
     lastBlogRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) setPageNumber((prev) => prev++)
+      if (entries[0].isIntersecting && hasMore) {
+        setPageNumber((prev) => prev + 1)
+      }
     })
-  }, [blogs])
+
+    if(node) lastBlogRef.current.observe(node)
+  }, [hasMore])
   
   return (
     <Container sx={{mt: 2}}>
       <Stack spacing={2}>
       {blogs && blogs.map((blog) => {
-        // console.log(blog)
-        console.log (`building BlogCard, blog id = ${blog.id} and the last blog = ${lastBlog}`)
         return (
+          blog.id === lastBlog?.id && hasMore ?
           <div
-            ref={blog.id === lastBlog ? lastBlogComponentCallback : null}
+            ref={lastBlogComponentCallback}
+            key={blog.id} 
+          >
+            <BlogCard 
+              blog={blog}
+              uploadingImage={uploadingImage}
+            />
+          </div>
+          :
+          <div
             key={blog.id} 
           >
             <BlogCard 

@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import { AuthContext } from '../../Contexts/AuthProvider';
 
-import { auth, db, logout } from '../../Core/Firebase';
+import { logout } from '../../Core/Firebase';
 import useAvatar from '../../Hooks/useAvatar';
 
 const NavAvatarMenu = () => {

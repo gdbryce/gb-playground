@@ -84,7 +84,7 @@ const Home = () => {
   const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
 
   const [pageNumber, setPageNumber] = useState(1)
-  const { blogs, lastBlog } = useFireblog(pageNumber, newBlog.uploadingImage)
+  const { blogs, lastBlog, hasMore, getFirstResults, getNextResults } = useFireblog(pageNumber, newBlog.uploadingImage)
 
   const navigate = useNavigate();
 
@@ -102,13 +102,21 @@ const Home = () => {
   }, [currentUser])
 
   useEffect(() => {
-    userName && dispatch({
+    dispatch({
       type: "UPDATE_AUTHOR",
       payload: {
         userName
       }
     })
-  }, [userName])
+  }, [userName, newBlog.author])
+
+  useEffect(() => {
+    if (hasMore) pageNumber === 1 ? getFirstResults() : getNextResults()
+  },[pageNumber, hasMore])
+
+  useEffect(() => {
+    if (newBlog.submitting) setPageNumber(1)
+  }, [newBlog.submitting])
 
   return (
     <>
@@ -120,6 +128,7 @@ const Home = () => {
     {blogs && <BlogContainer 
       blogs={blogs} 
       lastBlog={lastBlog} 
+      hasMore={hasMore}
       uploadingImage={newBlog.uploadingImage}
       setPageNumber={setPageNumber}
     />}

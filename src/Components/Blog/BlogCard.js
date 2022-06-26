@@ -11,7 +11,7 @@ const BlogCard = ( { blog, uploadingImage } ) => {
   return (
     <Card 
       color="charcoal"
-      sx={{ maxWidth: 600 }}
+      sx={{ maxWidth: "75vw", mx: "auto" }}
     >
       {blog && 
         <>
@@ -39,8 +39,8 @@ const BlogCard = ( { blog, uploadingImage } ) => {
         <CardActionArea>
           {blog.blogMeta.hasBlogImage &&
           <CardMedia
+            sx= {{ maxHeight: {xs: "20vh", md:"40vh"}}}
             component="img"
-            height= {250}
             image={imageURL}
             alt="blog image retrieved from GCS"
           />}
@@ -56,8 +56,8 @@ const BlogCard = ( { blog, uploadingImage } ) => {
               gutterBottom
               variant="body2"
             >
-              {blog.posted && blog.posted.toDate().
-                toLocaleDateString('en-GB', 
+              {blog.posted && blog.posted.toDate()
+                .toLocaleDateString('en-GB', 
                 {
                   weekday: 'long',
                   year: 'numeric',

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import { Button, Divider, Stack } from '@mui/material'
-import { auth, registerWithEmailAndPassword, signInWithGoogle} from "../../../Core/Firebase"
+import { registerWithEmailAndPassword, signInWithGoogle} from "../../../Core/Firebase"
 
 const SignUpTabPanel = () => {
   const [ email, setEmail ] = useState("");
