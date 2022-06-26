@@ -9,7 +9,6 @@ import NavHamburgerMenu from './NavHamburgerMenu';
 import NavButtonStackMenu from './NavButtonStackMenu';
 import NavAvatarMenu from './NavAvatarMenu';
 
-import { logout } from '../../Core/Firebase';
 import SimpleModal from '../Utils/SimpleModal';
 
 const Bar = ( { toggleNewBlog } ) => {

@@ -1,22 +1,12 @@
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom"
 import { Button, Divider, Stack } from '@mui/material'
-// import { AuthContext } from '../../../Contexts/AuthProvider'
-// import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, logInWithEmailAndPassword, signInWithGoogle, sendPasswordReset } from "../../../Core/Firebase" 
 
 const SignInTabPanel = () => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
-  // const { currentUser } = useContext(AuthContext)
-  // const [ user, loading, error ] = useAuthState(auth);
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   currentUser && navigate("/Home")
-  // }, [ currentUser ])
 
   return (
     <div>

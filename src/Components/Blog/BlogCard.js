@@ -1,18 +1,12 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Avatar, Card, CardActionArea, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material'
 import React from 'react'
-import { useEffect } from 'react';
 import useAvatar from '../../Hooks/useAvatar'
 import useBlogImage from '../../Hooks/useBlogImage'
 
 const BlogCard = ( { blog, uploadingImage } ) => {
   const [ avatarInitials, avatarColor ] = useAvatar(blog.author);
   const { imageURL } = useBlogImage(blog.id, blog.blogMeta, uploadingImage);
-
-  // useEffect(() => {
-  //   blog && updateStringAvatar(blog.blog.author);
-  // }, [blog])
-  // blog && console.log(blog)
 
   return (
     <Card 

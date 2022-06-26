@@ -1,9 +1,7 @@
-import { Modal, Typography, Box } from '@mui/material'
 import React from 'react'
-import { useState } from 'react'
+import { Modal, Typography, Box } from '@mui/material'
 
 const SimpleModal = ({ modalTitle, modalBody, visible, setVisible }) => {
-  // const [visible, setVisible] = useState(false)
   const handleOpen = () => setVisible(true)
   const handleClose = () => setVisible(false)
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react';
 import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import Dropzone from 'react-dropzone'

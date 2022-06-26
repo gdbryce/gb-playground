@@ -1,25 +1,14 @@
+import React, { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import React, { useState } from 'react'
 import { Button, Divider, Stack } from '@mui/material'
-// import { useAuthState } from 'react-firebase-hooks/auth'
-// import { AuthContext } from '../../../Contexts/AuthProvider'
 import { auth, registerWithEmailAndPassword, signInWithGoogle} from "../../../Core/Firebase"
-// import { useHistory, useNavigate } from 'react-router-dom'
-// import { useContext } from 'react'
 
 const SignUpTabPanel = () => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ firstName, setFirstName ] = useState("");
   const [ lastName, setLastName ] = useState("");
-  // const [ user, loading, error ] = useAuthState(auth);
-  // const { currentUser } = useContext(AuthContext)
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   currentUser && navigate("/Home")
-  // }, [ currentUser ])
 
   return (
     <div>

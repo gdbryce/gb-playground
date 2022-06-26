@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useReducer, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
-// import { collection, query, where, getDocs } from 'firebase/firestore';
-import { Button, Divider, Stack, Typography } from '@mui/material'
-// import { useAuthState } from 'react-firebase-hooks/auth'
-// import { auth, db, logout } from '../../Core/Firebase';
+import { Divider } from '@mui/material'
 import useFireblog from '../../Hooks/useFireblog'
 
 import { AuthContext } from '../../Contexts/AuthProvider';
@@ -83,34 +80,13 @@ const newBlogReducer = ( state, { type, payload } ) => {
 }
 
 const Home = () => {
-  // const [ user, loading, error ] = useAuthState(auth);
-  // const [ name, setName ] = useState("");
-
   const { currentUser, userName } = useContext(AuthContext);
-
   const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
 
-  // const [refreshBlogs, setRefreshBlogs] = useState(false)
-  // const [pageNumber, setPageNumber] = useState(1)
-
-  const [blogControl, setBlogControl] = useState({refresh: false, pageNumber: 1})
-  const { blogs, lastBlog } = useFireblog(blogControl, newBlog.uploadingImage)
+  const [pageNumber, setPageNumber] = useState(1)
+  const { blogs, lastBlog } = useFireblog(pageNumber, newBlog.uploadingImage)
 
   const navigate = useNavigate();
-
-  // const fetchUserName = async () => {
-  //   try {
-  //     console.log("Firestore: Query to user");
-  //     const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-  //     const doc = await getDocs(q);
-  //     const data = doc.docs[0].data();
-  //     setName(data.name);
-  //   }
-  //   catch (err) {
-  //     console.log(err);
-  //     alert(err.message);
-  //   }
-  // };
 
   const handleToggleNewBlog = () => {
     dispatch({
@@ -134,21 +110,19 @@ const Home = () => {
     })
   }, [userName])
 
-  // useEffect(() => {
-  //   if (loading) return;
-  //   if (!user) return navigate("/");
-  //   fetchUserName();
-  // }, [ user, loading ])
-
   return (
     <>
     <Bar toggleNewBlog={handleToggleNewBlog}/>
     <Divider />
 
-    {newBlog.visible && <BlogEntry newBlogState={newBlog} newBlogDispatch={dispatch} triggerRefresh={setBlogControl}/>}
-    {/* <Divider /> */}
+    {newBlog.visible && <BlogEntry newBlogState={newBlog} newBlogDispatch={dispatch}/>}
     
-    <BlogContainer blogs={blogs} uploadingImage={newBlog.uploadingImage}/>
+    {blogs && <BlogContainer 
+      blogs={blogs} 
+      lastBlog={lastBlog} 
+      uploadingImage={newBlog.uploadingImage}
+      setPageNumber={setPageNumber}
+    />}
     </>
   )
 };

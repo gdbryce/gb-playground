@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ImageIcon from '@mui/icons-material/Image';  
 import EventIcon from '@mui/icons-material/Event';
@@ -6,9 +6,6 @@ import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Typo
 import BlogImageDropzone from './BlogImageDropzone';
 
 import { submitBlogToFirestore } from '../../Core/Firebase';
-import { useEffect } from 'react';
-// import { AuthContext } from '../../Contexts/AuthProvider';
-
 
 const buttons = [
   <ToggleButton key="BlogEntry-btn-blogText" value="blogText"><TextSnippetIcon /></ToggleButton>,
@@ -16,21 +13,10 @@ const buttons = [
   <ToggleButton key="BlogEntry-btn-blogEvent" value="blogEvent"><EventIcon /></ToggleButton>
 ]
 
-const BlogEntry = ({ newBlogState, newBlogDispatch, triggerRefresh }) => {
+const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
   const [buttonSelections, setButtonSelections] = useState(() => ["blogText"]);
 
-  // const [blogText, setBlogText] = useState("");
-  // const [blogTitle, setBlogTitle] = useState("");
-  // const [droppedBlogImage, setDroppedBlogImage] = useState();
-  // const [droppedBlogImageURL, setDroppedBlogImageURL] = useState();
-  // const [uploadingImage, setUploadingImage] = useState();
-
-  // const { userName } = useContext(AuthContext);
-
   const handleImageDrop = acceptedFiles => {
-    // setDroppedBlogImage(acceptedFiles[0]);
-    // setDroppedBlogImageURL(URL.createObjectURL(acceptedFiles[0]));
-
     newBlogDispatch({
       type: "UPDATE_BLOG_IMAGE",
       payload: {
@@ -42,10 +28,7 @@ const BlogEntry = ({ newBlogState, newBlogDispatch, triggerRefresh }) => {
 
   const resetImage = e => {
     e.preventDefault();
-
-    // setDroppedBlogImage(null);
-    // setDroppedBlogImageURL(null);
-
+    
     newBlogDispatch({
       type: "UPDATE_BLOG_IMAGE",
       payload: {
