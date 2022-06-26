@@ -10,10 +10,19 @@ import NavButtonStackMenu from './NavButtonStackMenu';
 import NavAvatarMenu from './NavAvatarMenu';
 
 import { logout } from '../../Core/Firebase';
+import SimpleModal from '../Utils/SimpleModal';
 
 const Bar = ( { toggleNewBlog } ) => {
+  const [aboutVisible, setAboutVisible] = useState(false)
+  const aboutTitle = "About Fireblog"
+  const aboutBody = "This is a React App developed by Gordon Bryce as a platform for learning full-stack development skills"
+
   const handleHomeClick = () => {
     console.log("Home Clicked")
+  }
+
+  const showAbout = () => {
+    setAboutVisible(true) 
   }
 
   const navMenuItems = [
@@ -26,12 +35,13 @@ const Bar = ( { toggleNewBlog } ) => {
       action: toggleNewBlog
     },
     {
-      title: "Log Out",
-      action: logout
+      title: "About",
+      action: showAbout
     }
   ];
 
   return (
+    <>
     <AppBar 
       position="sticky"
     >
@@ -108,6 +118,15 @@ const Bar = ( { toggleNewBlog } ) => {
         </Toolbar>
       </Container>
     </AppBar>
+
+    {/* Modal dialogs */}
+    <SimpleModal
+      modalTitle={aboutTitle}
+      modalBody={aboutBody}
+      visible={aboutVisible}
+      setVisible={setAboutVisible}
+    />
+    </>
   )
 }
 

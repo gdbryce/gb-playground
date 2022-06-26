@@ -50,7 +50,7 @@ const NavHamburgerMenu = ( { menuItems } ) => {
         }}
       >
         {menuItems.map((item) => (
-        <MenuItem key={item.title} onClick={handleCloseNavMenu}>
+        <MenuItem key={item.title} onClick={item.action}>
           <Typography textAlign="center">{item.title}</Typography>
         </MenuItem>
       ))}
