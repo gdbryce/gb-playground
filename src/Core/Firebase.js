@@ -42,7 +42,13 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+
 const signInWithGoogle = async () => {
+  // Attempt to get google auth to allow accounts to be selected
+  googleProvider.setCustomParameters({
+    prompt: 'select_account',
+  });
+
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;

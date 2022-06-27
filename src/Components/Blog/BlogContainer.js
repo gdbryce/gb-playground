@@ -20,7 +20,12 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, setPageNumber
   }, [hasMore])
   
   return (
-    <Container sx={{mt: 2}}>
+    <Container 
+      sx={{
+        mt: 2,
+        maxWidth: {xs: "100%", md: "75vw"}, 
+      }}
+    >
       <Stack spacing={2}>
       {blogs && blogs.map((blog) => {
         return (

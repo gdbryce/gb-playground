@@ -17,7 +17,8 @@ const BlogImageDropzone = ({
         sx={{
           display: "flex",
           flexGrow: 1,
-          minHeight: 200
+          minHeight: 200,
+          maxHeight: 300
         }}
         onClick={resetImage}
       >

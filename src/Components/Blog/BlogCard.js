@@ -10,8 +10,10 @@ const BlogCard = ( { blog, uploadingImage } ) => {
 
   return (
     <Card 
-      color="charcoal"
-      sx={{ maxWidth: "75vw", mx: "auto" }}
+      sx={{ 
+        maxWidth: {xs: "100%", md: "60vw"}, 
+        mx: {xs: 0, md: "auto" }
+      }}
     >
       {blog && 
         <>
@@ -25,10 +27,18 @@ const BlogCard = ( { blog, uploadingImage } ) => {
               {avatarInitials}
             </Avatar>
           }
-          titleTypographyProps={{
-            variant: "h4"
-          }}
-          title= {blog.title}
+          title= {
+            <Typography
+              variant= "h4"
+              component= "h6"
+              sx= {{ 
+                wordBreak: "break-word",
+                overflow: "hidden"
+              }}
+            >
+              {blog.title}
+            </Typography>
+          }
           action={
             <IconButton aria-label="blog options">
               <MoreVertIcon />

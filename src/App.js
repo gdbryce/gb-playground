@@ -5,6 +5,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { AuthProvider } from './Contexts/AuthProvider';
 
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import Landing from './Components/Landing/Landing';
 import Home from './Components/Pages/Home';
 
@@ -41,15 +44,19 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <div className="App">
-          <Router>
-            <Routes>
-              <Route exact path="/" element={<Landing />} />
-              <Route exact path="/Home" element={<Home />} />
-            </Routes>
-          </Router>
-          
-        </div>
+        <LocalizationProvider 
+          dateAdapter={AdapterDateFns}
+          >
+          <div className="App">
+            <Router>
+              <Routes>
+                <Route exact path="/" element={<Landing />} />
+                <Route exact path="/Home" element={<Home />} />
+              </Routes>
+            </Router>
+            
+          </div>
+        </LocalizationProvider>
       </ThemeProvider>
     </AuthProvider>
   );

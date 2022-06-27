@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import ImageIcon from '@mui/icons-material/Image';  
 import EventIcon from '@mui/icons-material/Event';
-import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Button, Stack } from '@mui/material';
+import { Box, ToggleButtonGroup, ToggleButton, Container, Paper, TextField, Button, Stack, Typography } from '@mui/material';
 import BlogImageDropzone from './BlogImageDropzone';
 
 import { submitBlogToFirestore } from '../../Core/Firebase';
+import BlogEventEntry from './BlogEventEntry';
 
 const buttons = [
   <ToggleButton key="BlogEntry-btn-blogText" value="blogText"><TextSnippetIcon /></ToggleButton>,
@@ -108,13 +109,14 @@ const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
   return (
     <Container
       sx={{
-        my: 2
+        my: 2,
+        maxWidth: {xs: "100%", md: "60vw"}, 
       }}
     >
       <Paper
-        sx={{
-          maxWidth: "75vw",
-          mx: "auto"
+        sx={{ 
+          maxWidth: {xs: "100%", md: "60vw"}, 
+          mx: {xs: 0, md: "auto" }
         }}
       >
         {/* Blog Title - full width of the paper at the header */}
@@ -177,7 +179,9 @@ const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
                 sx={{
                   m: 1,
                   display: "flex",
-                  flexGrow: 1
+                  flexGrow: 1,
+                  minHeight: 150,
+                  maxHeight: 300
                 }}
               >
                 <BlogImageDropzone {...imageProps}/>
@@ -199,6 +203,18 @@ const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
                 value={newBlogState.blogText}
                 onChange={(e) => newBlogDispatch({type: "UPDATE_BLOG_TEXT", payload: {blogText: e.target.value}})}
               />
+            </Box>
+            }
+
+            {/* Event Container */}
+            {buttonSelections.includes("blogEvent") &&
+            <Box
+              sx={{
+                m: 1
+              }}
+            >
+              <Typography variant="subtitle1" sx={{mb: 2}}>Tell us about your event...</Typography>
+              <BlogEventEntry />
             </Box>
             }
 
