@@ -4,20 +4,21 @@ import { useCallback } from 'react'
 import { useRef } from 'react'
 import BlogCard from './BlogCard'
 
-const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, setPageNumber }) => {
+const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, updateBlogs }) => {
   const  lastBlogRef = useRef()
 
   const lastBlogComponentCallback = useCallback((node) => {
     if (lastBlogRef.current) lastBlogRef.current.disconnect()
 
     lastBlogRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPageNumber((prev) => prev + 1)
+      if (entries[0].isIntersecting && blogs && hasMore) {
+        console.log ("Intersection detected")
+        updateBlogs()
       }
     })
 
     if(node) lastBlogRef.current.observe(node)
-  }, [hasMore])
+  }, [lastBlog])
   
   return (
     <Container 
@@ -35,6 +36,7 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, setPageNumber
             key={blog.id} 
           >
             <BlogCard 
+              id={`BlogCard-${blog.id}`}
               blog={blog}
               uploadingImage={uploadingImage}
             />
@@ -44,6 +46,7 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, uploadingImage, setPageNumber
             key={blog.id} 
           >
             <BlogCard 
+              id={`BlogCard-${blog.id}`}
               blog={blog}
               uploadingImage={uploadingImage}
             />

@@ -20,7 +20,7 @@ function useBlogImage( blogID, blogMeta, uploadingImage) {
 
   useEffect(() => {
     if(blogMeta.hasBlogImage) getBlogImage(blogID);
-  }, [imageURL, uploadingImage])
+  }, [uploadingImage])
 
   return { imageURL }
 }

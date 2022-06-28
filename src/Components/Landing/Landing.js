@@ -11,7 +11,7 @@ const Landing = () => {
 
   useEffect(() => {
     currentUser && navigate("/Home")
-  }, [ currentUser ])
+  }, [currentUser])
 
   return (
     <>

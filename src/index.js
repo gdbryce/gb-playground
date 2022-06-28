@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+// import 'dotenv/config'; // Didn't work shouldn't have tried to use env variables on client side code
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

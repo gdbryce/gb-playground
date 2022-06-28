@@ -180,8 +180,7 @@ const BlogEntry = ({ newBlogState, newBlogDispatch }) => {
                   m: 1,
                   display: "flex",
                   flexGrow: 1,
-                  minHeight: 150,
-                  maxHeight: 300
+                  minHeight: 150
                 }}
               >
                 <BlogImageDropzone {...imageProps}/>

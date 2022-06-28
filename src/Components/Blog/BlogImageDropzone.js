@@ -16,13 +16,15 @@ const BlogImageDropzone = ({
       <ImageList
         sx={{
           display: "flex",
-          flexGrow: 1,
-          minHeight: 200,
-          maxHeight: 300
+          flexGrow: 1
         }}
         onClick={resetImage}
       >
-        <ImageListItem key="BlogEntry-droppedImage">
+        <ImageListItem 
+          key="BlogEntry-droppedImage" 
+          // BUG: Come back to this because it's not presenting the image correctly
+          // sx={{ '& > img': { maxHeight: 200 }, maxHeight: 200, mx: "auto" }}
+        >
           <img
             // loading="lazy" 
             src={droppedBlogImageURL} 

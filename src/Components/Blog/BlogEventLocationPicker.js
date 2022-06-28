@@ -91,7 +91,7 @@ const BlogEventLocationPicker = () => {
             }}
           >
             <Typography variant="body1" component="h5">{option.formattedAddress}</Typography>
-            <Typography variant="subtitle2" componet="h6" sx={{display:"block", fontStyle: "oblique"}}> {option.locality} {option.adminDistrict2} {option.adminDistrict}</Typography>
+            <Typography variant="subtitle2" componet="h6" sx={{display:"block", fontStyle: "oblique"}}> {option.locality}, {option.adminDistrict2}, {option.adminDistrict}</Typography>
           </Box>
         </Box>
       )}

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useReducer, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Divider } from '@mui/material'
-import useFireblog from '../../Hooks/useFireblog'
-
+import { getFireblogResults } from '../../Core/Firebase'
 import { AuthContext } from '../../Contexts/AuthProvider';
 
 import Bar from '../Layout/Bar';
@@ -80,11 +79,14 @@ const newBlogReducer = ( state, { type, payload } ) => {
 }
 
 const Home = () => {
+  console.log("loading Home")
   const { currentUser, userName } = useContext(AuthContext);
   const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
 
-  const [pageNumber, setPageNumber] = useState(1)
-  const { blogs, lastBlog, hasMore, getFirstResults, getNextResults } = useFireblog(pageNumber, newBlog.uploadingImage)
+  const [blogs, setBlogs] = useState()
+  const [lastBlog, setLastBlog] = useState()
+  const [hasMore, setHasMore] = useState(true)
+  // const { blogs, lastBlog, hasMore, getFireblogResults } = useFireblog()
 
   const navigate = useNavigate();
 
@@ -95,6 +97,20 @@ const Home = () => {
         newValue: !newBlog.visible
       }
     })
+  }
+
+  const updateBlogs = () => {
+    getFireblogResults(blogs, lastBlog)
+      .then(([newBlogs, newLastBlog, newHasMore]) => {
+        setBlogs(newBlogs)
+        setLastBlog(newLastBlog)
+        setHasMore(newHasMore)
+
+        console.log ("Returning from Firebase module", newBlogs, newLastBlog, newHasMore)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      }) 
   }
 
   useEffect(() => {
@@ -108,15 +124,11 @@ const Home = () => {
         userName
       }
     })
-  }, [userName, newBlog.author])
+  }, [newBlog.author])
 
   useEffect(() => {
-    if (hasMore) pageNumber === 1 ? getFirstResults() : getNextResults()
-  },[pageNumber, hasMore])
-
-  useEffect(() => {
-    if (newBlog.submitting) setPageNumber(1)
-  }, [newBlog.submitting])
+    updateBlogs()
+  },[])
 
   return (
     <>
@@ -130,7 +142,7 @@ const Home = () => {
       lastBlog={lastBlog} 
       hasMore={hasMore}
       uploadingImage={newBlog.uploadingImage}
-      setPageNumber={setPageNumber}
+      updateBlogs={updateBlogs}
     />}
     </>
   )

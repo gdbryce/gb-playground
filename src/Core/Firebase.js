@@ -16,7 +16,10 @@ import {
   collection,
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  orderBy,
+  limit,
+  startAfter
 } from "firebase/firestore";
 import { 
   getStorage, 
@@ -37,46 +40,58 @@ const firebaseConfig = {
   measurementId: "G-FL4TV73HZD"
 };
 
+const pageLimit = 5
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-const signInWithGoogle = async () => {
+const signInWithGoogle = () => {
   // Attempt to get google auth to allow accounts to be selected
   googleProvider.setCustomParameters({
     prompt: 'select_account',
   });
 
-  try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docs = await getDocs(q);
-    if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email
-      });
-    }
-  }
-  catch (err) {
-    console.log(err);
-    alert(err.message);
-  }
+  signInWithPopup(auth, googleProvider)
+    .then((res) => {
+      const user = res.user;
+      const q = query(collection(db, "users"), where("uid", "==", user.uid));
+
+      getDocs(q)
+        .then((querySnapshot) => {
+          if (querySnapshot.docs.length === 0) {
+            addDoc(collection(db, "users"), {
+              uid: user.uid,
+              name: user.displayName,
+              authProvider: "google",
+              email: user.email
+            })
+            .catch((err) => {
+              console.log(err);
+              alert(err.message);
+            })
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.message);
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(err.message);
+    });
+  
 };
 
-const logInWithEmailAndPassword = async (email, password) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  }
-  catch (err) {
+const logInWithEmailAndPassword = (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+  .catch ((err) => {
     console.log(err);
     alert(err.message);
-  }
+  });
 };
 
 const registerWithEmailAndPassword = async (name, email, password) => {
@@ -184,6 +199,41 @@ const addDroppedImageToStorageWithFilename = ((file, filename, setUploadingImage
     );
 });
 
+function getQuery(blogs, lastBlog) {
+  if(!blogs) return query(collection(db, "testBlogs"),
+                          orderBy("posted", "desc"),
+                          limit(pageLimit))
+
+  return query(collection(db, "testBlogs"),
+                orderBy("posted", "desc"),
+                startAfter(lastBlog),
+                limit(pageLimit))
+}
+
+const getFireblogResults = (blogs, lastBlog) => {
+  return new Promise((resolve, reject) => {
+  const q = getQuery(blogs, lastBlog)
+
+  console.log("Sending query to Firestore")
+  getDocs(q)
+    .then((querySnapshot) => {
+      const newBlogs = querySnapshot.docs.map((doc) => {
+        return {id: doc.id, ...doc.data()}
+      })
+      
+      const returnBlogs = blogs ? [...blogs, ...newBlogs] : newBlogs;
+      const returnLastBlog = querySnapshot.docs[pageLimit-1];
+      const returnHasMore = !querySnapshot.docs.length < pageLimit
+
+      resolve( [ returnBlogs, returnLastBlog, returnHasMore ] )
+      })
+      .catch((err) => {
+        console.log(`Error retrieving blogs = ${err.message}`)
+        reject(Error("Something went wrong with getFireblogResults"))
+      })
+  }) 
+};
+
 export {
   auth,
   db,
@@ -192,5 +242,6 @@ export {
   registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
-  submitBlogToFirestore
+  submitBlogToFirestore,
+  getFireblogResults
 };
