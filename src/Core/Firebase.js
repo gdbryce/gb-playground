@@ -284,9 +284,9 @@ const getFireblogResults = (blogs, lastBlog) => {
       
       const returnBlogs = blogs ? [...blogs, ...newBlogs] : newBlogs;
       const returnLastBlog = querySnapshot.docs[pageLimit-1];
-      const returnHasMore = !querySnapshot.docs.length < pageLimit
+      const returnHasMore = querySnapshot.docs.length < pageLimit ? false : true
 
-      resolve( [ returnBlogs, returnLastBlog, returnHasMore ] )
+      resolve( [returnBlogs, returnLastBlog, returnHasMore] )
       })
       .catch((err) => {
         console.log(`Error retrieving blogs = ${err.message}`)

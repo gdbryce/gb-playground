@@ -14,8 +14,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const { authenticated, authenticatedUser, userName, refreshContext } = useContext(AuthContext)
 
-  console.log("App: AuthContext check", isLoading, authenticated, authenticatedUser?.uid, userName)
-
   useEffect(() => {
     firebaseObserver.subscribe('authStateChanged', (loggedIn)=> {
       console.log ("App: useEffect for subscribing to FirebaseObserver, loggedIn = ", loggedIn)
@@ -25,10 +23,6 @@ function App() {
 
     return() => { firebaseObserver.unsubscribe('authStateChanged'); }
   }, [])
-
-  useEffect(() => {
-    console.log("App: useEffect for testing AuthContext refresh", authenticated, authenticatedUser?.uid, userName)
-  },[authenticated, userName])
 
   return (
     <>{

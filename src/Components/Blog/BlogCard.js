@@ -8,6 +8,8 @@ const BlogCard = ( { blog, uploadingImage } ) => {
   const [ avatarInitials, avatarColor ] = useAvatar(blog.author);
   const { imageURL } = useBlogImage(blog.id, blog.blogMeta, uploadingImage);
 
+  console.log("BlogCard: id=", blog.id)
+  
   return (
     <Card 
       sx={{ 

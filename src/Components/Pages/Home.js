@@ -87,6 +87,7 @@ const Home = () => {
   const [blogs, setBlogs] = useState()
   const [lastBlog, setLastBlog] = useState()
   const [hasMore, setHasMore] = useState(true)
+  const [isBlogsLoading, setIsBlogsLoading] = useState(false)
   // const { blogs, lastBlog, hasMore, getFireblogResults } = useFireblog()
 
   // const navigate = useNavigate();
@@ -101,6 +102,9 @@ const Home = () => {
   }
 
   const updateBlogs = () => {
+    if (isBlogsLoading) return;
+    
+    setIsBlogsLoading(true)
     getFireblogResults(blogs, lastBlog)
       .then(([newBlogs, newLastBlog, newHasMore]) => {
         setBlogs(newBlogs)
@@ -108,9 +112,11 @@ const Home = () => {
         setHasMore(newHasMore)
 
         console.log ("Returning from Firebase module", newBlogs, newLastBlog, newHasMore)
+        setIsBlogsLoading(false)
       })
       .catch((err) => {
         console.log(err.message)
+        setIsBlogsLoading(false)
       }) 
   }
 
@@ -142,6 +148,7 @@ const Home = () => {
       blogs={blogs} 
       lastBlog={lastBlog} 
       hasMore={hasMore}
+      isBlogsLoading={isBlogsLoading}
       uploadingImage={newBlog.uploadingImage}
       updateBlogs={updateBlogs}
     />}
