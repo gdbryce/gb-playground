@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { logout } from '../../Core/Firebase'
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -36,6 +38,10 @@ const Bar = ( { toggleNewBlog } ) => {
     {
       title: "About",
       action: showAbout
+    },
+    {
+      title: "Logout",
+      action: logout
     }
   ];
 

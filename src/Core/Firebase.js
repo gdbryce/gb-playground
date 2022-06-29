@@ -27,6 +27,7 @@ import {
   uploadBytesResumable, 
   getDownloadURL 
 } from 'firebase/storage';
+import ReactObserver from 'react-event-observer'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -47,6 +48,66 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+const firebaseObserver = ReactObserver();
+
+auth.onAuthStateChanged(() => {
+  console.log("Firebase: onAuthStateChange", loggedIn(), auth.currentUser?.uid)
+
+  // const data = {
+  //   loggedIn: loggedIn(),
+  //   currentUser: auth.currentUser,
+  //   authUserName: getUserName().then((name) => {return name})
+  // }
+
+  firebaseObserver.publish("authStateChanged", loggedIn())
+})
+
+const loggedIn = () => {
+  return !!auth.currentUser
+}
+
+const getUserName = () => {
+  // Exit if the user isn't currently logged in
+  if (!loggedIn()) return "";
+
+  return new Promise((resolve, reject) => {
+    const q = query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid));
+    getDocs(q)
+      .then((querySnapshot) => {
+        if(!querySnapshot.empty) {
+          console.log ("Firebase: getUserName - query resolved, name =", querySnapshot.docs[0].data().name)
+          resolve(querySnapshot.docs[0].data().name)
+        } 
+      })
+      .catch ((err) => {
+        console.log(err);
+        alert(err.message);
+        reject(err);
+      })
+  })
+
+  // Exit if the user isn't currently logged in
+  // if (!loggedIn()) return "";
+
+  // const q = query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid));
+  // getDocs(q)
+  //   .then((querySnapshot) => {
+  //     if(!querySnapshot.empty) {
+  //       console.log ("Firebase: getUserName - query resolved, name =", querySnapshot.docs[0].data().name)
+  //       return querySnapshot.docs[0].data().name
+  //     } 
+  //   })
+  //   .catch ((err) => {
+  //     console.log(err);
+  //     alert(err.message);
+  //     return "";
+  //   })
+
+  // return returnValue
+
+  // return !!auth.currentUser ? auth.currentUser.displayName : "Not Signed In"
+}
+
 
 const signInWithGoogle = () => {
   // Attempt to get google auth to allow accounts to be selected
@@ -237,6 +298,9 @@ const getFireblogResults = (blogs, lastBlog) => {
 export {
   auth,
   db,
+  firebaseObserver,
+  loggedIn,
+  getUserName,
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,

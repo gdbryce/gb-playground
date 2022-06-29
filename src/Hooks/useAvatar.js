@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useAvatar = (userName = "") => {
+const useAvatar = (userName) => {
 
     /* 
     - ------------------------------------------------------------
@@ -16,6 +16,8 @@ const useAvatar = (userName = "") => {
     const [avatarColor, setAvatarColor] = useState("");
 
     useEffect(() => {
+        if (!userName) return;
+
         calculateInitials();
         calculateColor();
     },[userName]);

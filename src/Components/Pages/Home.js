@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer, useContext } from 'react'
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+// import { withRouter } from '../Utils/withRouter';
 import { Divider } from '@mui/material'
 import { getFireblogResults } from '../../Core/Firebase'
 import { AuthContext } from '../../Contexts/AuthProvider';
@@ -80,7 +81,7 @@ const newBlogReducer = ( state, { type, payload } ) => {
 
 const Home = () => {
   console.log("loading Home")
-  const { currentUser, userName } = useContext(AuthContext);
+  const { authenticatedUser, userName } = useContext(AuthContext);
   const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
 
   const [blogs, setBlogs] = useState()
@@ -88,7 +89,7 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true)
   // const { blogs, lastBlog, hasMore, getFireblogResults } = useFireblog()
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleToggleNewBlog = () => {
     dispatch({
@@ -113,9 +114,9 @@ const Home = () => {
       }) 
   }
 
-  useEffect(() => {
-    !currentUser && navigate("/", { replace: true} )
-  }, [currentUser])
+  // useEffect(() => {
+  //   !currentUser && navigate("/", { replace: true} )
+  // }, [currentUser])
 
   useEffect(() => {
     dispatch({
