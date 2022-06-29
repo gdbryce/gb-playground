@@ -27,6 +27,13 @@ const initialNewBlog = {
   posted: null
 }
 
+const initialBlogs = {
+  status: "EMPTY",
+  blogs: null,
+  lastBlog: null,
+  hasMore: false
+}
+
 const newBlogReducer = ( state, { type, payload } ) => {
   switch (type) {
     case "TOGGLE_VISIBLE":
@@ -79,15 +86,41 @@ const newBlogReducer = ( state, { type, payload } ) => {
   }
 }
 
+const blogsReducer = ( state, { type, payload } ) => {
+  switch (type) {
+    case "FETCH":
+      return {
+        ...state,
+        status: "FETCHING"
+      }
+    case "REQUESTED":
+      return {
+        ...state,
+        status: "WAITING"
+      }
+    case "BLOGS_RESOLVED":
+      return {
+        ...state,
+        status: "UPDATED",
+        blogs: payload.newBlogs,
+        lastBlog: payload.newLastBlog,
+        hasMore: payload.newHasMore
+      }
+    default:
+      return state
+  }
+}
+
 const Home = () => {
   console.log("loading Home")
-  const { authenticatedUser, userName } = useContext(AuthContext);
-  const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog)
+  const { userName } = useContext(AuthContext);
+  const [newBlog, dispatch] = useReducer(newBlogReducer, initialNewBlog);
+  const [blogs, dispatchBlogs] = useReducer(blogsReducer, initialBlogs);
 
-  const [blogs, setBlogs] = useState()
-  const [lastBlog, setLastBlog] = useState()
-  const [hasMore, setHasMore] = useState(true)
-  const [isBlogsLoading, setIsBlogsLoading] = useState(false)
+  // const [blogs, setBlogs] = useState()
+  // const [lastBlog, setLastBlog] = useState()
+  // const [hasMore, setHasMore] = useState(true)
+  // const [isBlogsLoading, setIsBlogsLoading] = useState(false)
   // const { blogs, lastBlog, hasMore, getFireblogResults } = useFireblog()
 
   // const navigate = useNavigate();
@@ -100,25 +133,74 @@ const Home = () => {
       }
     })
   }
+  
+  const fetchBlogs = () => {
+    if (blogs.status !== "FETCHING") return
 
-  const updateBlogs = () => {
-    if (isBlogsLoading) return;
-    
-    setIsBlogsLoading(true)
-    getFireblogResults(blogs, lastBlog)
+    getFireblogResults(blogs.blogs, blogs.lastBlog)
       .then(([newBlogs, newLastBlog, newHasMore]) => {
-        setBlogs(newBlogs)
-        setLastBlog(newLastBlog)
-        setHasMore(newHasMore)
-
         console.log ("Returning from Firebase module", newBlogs, newLastBlog, newHasMore)
-        setIsBlogsLoading(false)
+
+        dispatchBlogs({
+          type: "BLOGS_RESOLVED",
+          payload: {
+            newBlogs,
+            newLastBlog,
+            newHasMore
+          }
+        })
       })
       .catch((err) => {
         console.log(err.message)
-        setIsBlogsLoading(false)
       }) 
   }
+  
+  useEffect(() => {
+    switch (blogs.status) {
+      case "EMPTY":
+        console.log("Home: useEffect status switch, status=", blogs.status)
+        dispatchBlogs({
+          type: "FETCH",
+          payload: {}
+        })
+      case "FETCHING":
+        console.log("Home: useEffect status switch, status=", blogs.status)
+        fetchBlogs()
+
+        // dispatchBlogs({
+        //   type: "REQUESTED",
+        //   payload: {}
+        // })
+
+      case "WAITING":
+        console.log("Home: useEffect status switch, status=", blogs.status)
+        return
+      case "UPDATED":
+        console.log("Home: useEffect status switch, status=", blogs.status)
+        return
+      default:
+        return
+    }
+  }, [blogs.status])
+
+  // const updateBlogs = () => {
+  //   if (isBlogsLoading) return;
+    
+  //   setIsBlogsLoading(true)
+  //   getFireblogResults(blogs, lastBlog)
+  //     .then(([newBlogs, newLastBlog, newHasMore]) => {
+  //       setBlogs(newBlogs)
+  //       setLastBlog(newLastBlog)
+  //       setHasMore(newHasMore)
+
+  //       console.log ("Returning from Firebase module", newBlogs, newLastBlog, newHasMore)
+  //       setIsBlogsLoading(false)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message)
+  //       setIsBlogsLoading(false)
+  //     }) 
+  // }
 
   // useEffect(() => {
   //   !currentUser && navigate("/", { replace: true} )
@@ -133,9 +215,9 @@ const Home = () => {
     })
   }, [newBlog.author])
 
-  useEffect(() => {
-    updateBlogs()
-  },[])
+  // useEffect(() => {
+  //   updateBlogs()
+  // },[])
 
   return (
     <>
@@ -145,12 +227,13 @@ const Home = () => {
     {newBlog.visible && <BlogEntry newBlogState={newBlog} newBlogDispatch={dispatch}/>}
     
     {blogs && <BlogContainer 
-      blogs={blogs} 
-      lastBlog={lastBlog} 
-      hasMore={hasMore}
-      isBlogsLoading={isBlogsLoading}
+      blogs={blogs.blogs} 
+      dispatchBlogs={dispatchBlogs}
+      lastBlog={blogs.lastBlog} 
+      hasMore={blogs.hasMore}
+      // isBlogsLoading={isBlogsLoading}
       uploadingImage={newBlog.uploadingImage}
-      updateBlogs={updateBlogs}
+      // updateBlogs={updateBlogs}
     />}
     </>
   )

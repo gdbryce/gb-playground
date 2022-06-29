@@ -85,27 +85,6 @@ const getUserName = () => {
         reject(err);
       })
   })
-
-  // Exit if the user isn't currently logged in
-  // if (!loggedIn()) return "";
-
-  // const q = query(collection(db, "users"), where("uid", "==", auth.currentUser?.uid));
-  // getDocs(q)
-  //   .then((querySnapshot) => {
-  //     if(!querySnapshot.empty) {
-  //       console.log ("Firebase: getUserName - query resolved, name =", querySnapshot.docs[0].data().name)
-  //       return querySnapshot.docs[0].data().name
-  //     } 
-  //   })
-  //   .catch ((err) => {
-  //     console.log(err);
-  //     alert(err.message);
-  //     return "";
-  //   })
-
-  // return returnValue
-
-  // return !!auth.currentUser ? auth.currentUser.displayName : "Not Signed In"
 }
 
 

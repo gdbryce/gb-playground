@@ -7,12 +7,12 @@ import Home from './Components/Pages/Home';
 import { AuthContext } from './Contexts/AuthProvider'
 import { Guard } from './Components/Utils/Guard';
 
-import { firebaseObserver, getUserName } from './Core/Firebase'
+import { firebaseObserver } from './Core/Firebase'
 import { useEffect } from 'react';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
-  const { authenticated, authenticatedUser, userName, refreshContext } = useContext(AuthContext)
+  const { authenticated, refreshContext } = useContext(AuthContext)
 
   useEffect(() => {
     firebaseObserver.subscribe('authStateChanged', (loggedIn)=> {
