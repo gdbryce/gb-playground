@@ -239,7 +239,24 @@ const addDroppedImageToStorageWithFilename = ((file, filename, setUploadingImage
     );
 });
 
-function getQuery(blogs, lastBlog) {
+const getBlogImage = blogID => {
+  return new Promise((resolve, reject) => {
+    const storage = getStorage();
+    if(`images/${blogID}.jpg`) {
+          getDownloadURL(ref(storage, `images/${blogID}.jpg`))
+            .then((url) => resolve(url))
+            .catch((err) => {
+              console.log(`Error when gathering image download URL from useBlogImage - ${err.message} `)
+              reject(err)
+            }) 
+    }
+    else {
+      resolve();
+    }
+  })
+}
+
+const getQuery = (blogs, lastBlog) => {
   if(!blogs) return query(collection(db, "testBlogs"),
                           orderBy("posted", "desc"),
                           limit(pageLimit))
@@ -252,27 +269,61 @@ function getQuery(blogs, lastBlog) {
 
 const getFireblogResults = (blogs, lastBlog) => {
   return new Promise((resolve, reject) => {
-  const q = getQuery(blogs, lastBlog)
+    const q = getQuery(blogs, lastBlog)
 
-  console.log("Sending query to Firestore")
-  getDocs(q)
-    .then((querySnapshot) => {
-      const newBlogs = querySnapshot.docs.map((doc) => {
-        return {id: doc.id, ...doc.data()}
-      })
-      
-      const returnBlogs = blogs ? [...blogs, ...newBlogs] : newBlogs;
-      const returnLastBlog = querySnapshot.docs[pageLimit-1];
-      const returnHasMore = querySnapshot.docs.length < pageLimit ? false : true
+    console.log("Sending query to Firestore")
+    getDocs(q)
+      .then((querySnapshot) => {
+        const newBlogs = querySnapshot.docs.map((doc) => {
+          return {...doc.data(), id: doc.id}
+        })
 
-      resolve( [returnBlogs, returnLastBlog, returnHasMore] )
+        // newBlogs.forEach((blog) => {
+        //   if (blog.blogMeta.hasBlogImage) {
+        //     getBlogImage(blog.id)
+        //       .then((url) => {
+        //         return {...blog, blogImage: url}
+        //       })
+        //       .catch((err) => {
+        //         console.log ("Firebase: getFireblogResults, blogImage URL does not exist")
+        //         return blog
+        //       })
+        //   } else {
+        //     return blog
+        //   }
+        // })
+
+        const returnBlogs = blogs ? [...blogs, ...newBlogs] : newBlogs;
+        const returnLastBlog = querySnapshot.docs[pageLimit-1];
+        const returnHasMore = querySnapshot.docs.length < pageLimit ? false : true
+
+        resolve( [returnBlogs, returnLastBlog, returnHasMore] )
       })
       .catch((err) => {
         console.log(`Error retrieving blogs = ${err.message}`)
         reject(Error("Something went wrong with getFireblogResults"))
       })
-  }) 
+    }) 
 };
+
+const getFireblogImages = (blogs) => {
+  const newBlogs = blogs.map(async (blog) => {
+    if (blog.blogMeta.hasBlogImage && !blog.blogImage) {
+      try {
+        const url = await getBlogImage(blog.id)
+        return {...blog, blogImage: url}
+      }
+      catch(err) {
+        console.log ("Firebase: getFireblogResults, blogImage URL does not exist")
+        return {...blog}
+      }
+    }
+    
+    return {...blog};
+  })
+
+  return Promise.all(newBlogs)
+}
 
 export {
   auth,
@@ -286,5 +337,6 @@ export {
   sendPasswordReset,
   logout,
   submitBlogToFirestore,
-  getFireblogResults
+  getFireblogResults,
+  getFireblogImages
 };

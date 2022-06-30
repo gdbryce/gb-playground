@@ -6,7 +6,7 @@ import { useCallback } from 'react'
 import { useRef } from 'react'
 import BlogCard from './BlogCard'
 
-const BlogContainer = ({ blogs, lastBlog, hasMore, dispatchBlogs, uploadingImage }) => {
+const BlogContainer = ({ blogs, blogsStatus, lastBlog, hasMore, dispatchBlogs, uploadingImage }) => {
   const  lastBlogRef = useRef()
 
   const lastBlogComponentCallback = useCallback((node) => {
@@ -20,7 +20,7 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, dispatchBlogs, uploadingImage
       // }
       entries.forEach(entry => {
         console.log ("Observer entry detected", entry)
-        if(entry.isIntersecting) {
+        if(entry.isIntersecting && blogsStatus === "UPDATED") {
           console.log("Intersection detected", entry)
           dispatchBlogs({ type: "FETCH", payload: {} })
         }
@@ -28,7 +28,7 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, dispatchBlogs, uploadingImage
     })
 
     if(node) lastBlogRef.current.observe(node)
-  }, [])
+  }, [blogsStatus, hasMore])
   
   return (
     <Container 
@@ -47,18 +47,21 @@ const BlogContainer = ({ blogs, lastBlog, hasMore, dispatchBlogs, uploadingImage
             key={blog.id} 
           >
             <BlogCard 
-              
               id={`BlogCard-${blog.id}`}
               blog={blog}
               uploadingImage={uploadingImage}
             />
           </div>
-          : <BlogCard 
-              key={blog.id} 
+          : 
+          <div
+            key={blog.id} 
+          >
+            <BlogCard 
               id={`BlogCard-${blog.id}`}
               blog={blog}
               uploadingImage={uploadingImage}
             />
+          </div>
         )
       })}
       </Stack>

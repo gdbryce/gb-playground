@@ -3,11 +3,11 @@ import { Avatar, Card, CardActionArea, CardContent, CardHeader, CardMedia, IconB
 import React from 'react'
 import { useEffect } from 'react';
 import useAvatar from '../../Hooks/useAvatar'
-import useBlogImage from '../../Hooks/useBlogImage'
+// import useBlogImage from '../../Hooks/useBlogImage'
 
-const BlogCard = ( { blog, uploadingImage } ) => {
+const BlogCard = React.memo(( { blog, uploadingImage } ) => {
   const [ avatarInitials, avatarColor ] = useAvatar(blog.author);
-  const { imageURL } = useBlogImage(blog.id, blog.blogMeta, uploadingImage);
+  // const { imageURL } = useBlogImage(blog.id, blog.blogMeta, uploadingImage);
 
   
   useEffect(() => {
@@ -53,11 +53,11 @@ const BlogCard = ( { blog, uploadingImage } ) => {
           />
         
         <CardActionArea>
-          {blog.blogMeta.hasBlogImage &&
+          {blog.blogMeta.hasBlogImage && blog.blogImage &&
           <CardMedia
             sx= {{ maxHeight: {xs: "20vh", md:"40vh"}}}
             component="img"
-            image={imageURL}
+            image={blog.blogImage}
             alt="blog image retrieved from GCS"
           />}
           <CardContent>
@@ -88,6 +88,6 @@ const BlogCard = ( { blog, uploadingImage } ) => {
       }
     </Card>
   )
-}
+})
 
 export default BlogCard
